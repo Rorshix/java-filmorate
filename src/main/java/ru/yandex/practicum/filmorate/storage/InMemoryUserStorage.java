@@ -10,9 +10,9 @@ import java.util.Map;
 @Component
 public class InMemoryUserStorage implements UserStorage {
 
-	private final Map<Integer, User> users = new HashMap <>();
+	private final Map<Integer, User> users = new HashMap<>();
 
-	private Integer globalId ;
+	private Integer globalId;
 
 	@Override
 	public List<User> getAllUsers() {
