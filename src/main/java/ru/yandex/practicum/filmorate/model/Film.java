@@ -29,6 +29,7 @@ public class Film {
     @Positive(message = "Продолжительность фильма должна быть положительной")
     private Integer duration;
 
-    public void setId(Integer generateId) {
+    public Integer setId(Integer generateId) {
+        return generateId;
     }
 }
