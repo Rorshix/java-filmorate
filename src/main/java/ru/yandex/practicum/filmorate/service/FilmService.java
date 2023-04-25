@@ -69,7 +69,7 @@ public class FilmService {
     private void checkUserId(Integer userId) {
         User user = userStorage.getUserById(userId);
         if (userId == null || user == null) {
-            throw new NotFoundException ("Пользователь не найден");
+            throw new NotFoundException("Пользователь не найден");
         }
 
     }
@@ -77,7 +77,7 @@ public class FilmService {
     private Film checkAndReturnFilm(Integer filmId) {
         Film film = filmStorage.getFilmById(filmId);
         if (filmId == null || film == null) {
-            throw new NotFoundException ("Фильм не найден");
+            throw new NotFoundException("Фильм не найден");
         }
         return film;
     }
