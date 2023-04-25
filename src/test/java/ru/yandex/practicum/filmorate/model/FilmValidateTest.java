@@ -23,7 +23,7 @@ public class FilmValidateTest {
 	public void shouldThrowExceptionWhenNameEmpty() {
 		Film film = Film.builder()
 				.name("")
-				.description("Пандора")
+				.description("Узник Азкабана")
 				.releaseDate(LocalDate.of(2009, 12, 18))
 				.duration(162)
 				.build();
@@ -36,8 +36,8 @@ public class FilmValidateTest {
 	@Test
 	public void shouldThrowExceptionWhenTooLongDescription() {
 		Film film = Film.builder()
-				.name("Аватар")
-				.description("Пандора".repeat(30))
+				.name("Гарри Поттер")
+				.description("Узник Азкабана".repeat(30))
 				.releaseDate(LocalDate.of(2009, 12, 18))
 				.duration(162)
 				.build();
@@ -64,8 +64,8 @@ public class FilmValidateTest {
 	@Test
 	public void shouldThrowExceptionWhenReleaseInFuture() {
 		Film film = Film.builder()
-				.name("Аватар")
-				.description("Пандора")
+				.name("Гарри Поттер")
+				.description("Узник Азкабана")
 				.releaseDate(LocalDate.of(3000, 12, 18))
 				.duration(162)
 				.build();

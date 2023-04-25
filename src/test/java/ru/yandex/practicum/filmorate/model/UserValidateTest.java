@@ -24,8 +24,8 @@ public class UserValidateTest {
 	public void shouldThrowExceptionWhenDateInFuture() {
 		User user1 = User.builder()
 				.birthday(LocalDate.of(3000, 8, 30))
-				.login("akhraa1")
-				.email("akhraa1@yandex.ru")
+				.login("v.chester")
+				.email("v.chester.yandex.ru")
 				.build();
 		ConstraintViolationException ex = assertThrows(
 				ConstraintViolationException.class,
@@ -38,7 +38,7 @@ public class UserValidateTest {
 		User user1 = User.builder()
 				.birthday(LocalDate.of(1992, 8, 30))
 				.login("")
-				.email("akhraa1@yandex.ru")
+				.email("v.chester@yandex.ru")
 				.build();
 		ConstraintViolationException ex = assertThrows(
 				ConstraintViolationException.class,
@@ -50,8 +50,8 @@ public class UserValidateTest {
 	public void shouldThrowExceptionWhenEmailNotValid() {
 		User user1 = User.builder()
 				.birthday(LocalDate.of(1992, 8, 30))
-				.login("akhraa1")
-				.email("333")
+				.login("v.chest")
+				.email("111")
 				.build();
 		ConstraintViolationException ex = assertThrows(
 				ConstraintViolationException.class,
