@@ -16,6 +16,6 @@ public class LocalDateValidator implements
 
 	@Override
 	public boolean isValid(LocalDate date, ConstraintValidatorContext context) {
-		return date != null&&date.isAfter(CREATED_MOVIE_DATE);
+		return date != null && date.isAfter(CREATED_MOVIE_DATE);
 	}
 }
