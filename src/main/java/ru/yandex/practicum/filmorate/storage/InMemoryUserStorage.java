@@ -20,6 +20,11 @@ public class InMemoryUserStorage implements UserStorage {
 	}
 
 	@Override
+	public void removeAllUsers() {
+		users.clear();
+	}
+
+	@Override
 	public User getUserById(Integer id) {
 		return users.get(id);
 	}
@@ -35,6 +40,11 @@ public class InMemoryUserStorage implements UserStorage {
 	public User updateUser(User user) {
 		users.put(user.getId(), user);
 		return user;
+	}
+
+	@Override
+	public void removeUserById(Integer id) {
+		users.remove(id);
 	}
 
 	private Integer generateId() {

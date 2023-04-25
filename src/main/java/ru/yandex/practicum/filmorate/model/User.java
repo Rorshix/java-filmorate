@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @Builder
 public class User {
-    private final Set<Long> friendsList = new LinkedHashSet<>();
+    private final Set<Integer> friendsList = new LinkedHashSet<>();
     private Integer id;
     @EqualsAndHashCode.Exclude
     @Past(message = "Дата должна быть в прошлом")

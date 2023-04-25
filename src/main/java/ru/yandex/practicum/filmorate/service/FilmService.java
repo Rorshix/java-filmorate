@@ -9,8 +9,9 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.util.Comparator;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,11 +45,31 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
+    public void addLike(Integer userId, Integer filmId) {
+        checkUserId(userId);
+        checkAndReturnFilm(filmId).getUserLikes().add(userId);
+    }
+
+    public void removeLike(Integer userId, Integer filmId) {
+        checkUserId(userId);
+        checkAndReturnFilm(filmId).getUserLikes().remove(userId);
+    }
+
+    public List<Film> findPopularFilms(Integer size) {
+
+        if (size == null || size <= 0) {
+            throw new RuntimeException("Значение size должно быть больше нуля");
+        }
+        return filmStorage.getAllFilms().stream()
+                .sorted(Comparator.comparing(x -> x.getUserLikes().size(), Comparator.reverseOrder()))
+                .limit(size)
+                .collect(Collectors.toList());
+    }
 
     private void checkUserId(Integer userId) {
         User user = userStorage.getUserById(userId);
         if (userId == null || user == null) {
-            throw new NotFoundException("Пользователь не найден");
+            throw new NotFoundException ("Пользователь не найден");
         }
 
     }
@@ -56,7 +77,7 @@ public class FilmService {
     private Film checkAndReturnFilm(Integer filmId) {
         Film film = filmStorage.getFilmById(filmId);
         if (filmId == null || film == null) {
-            throw new NotFoundException("Фильм не найден");
+            throw new NotFoundException ("Фильм не найден");
         }
         return film;
     }

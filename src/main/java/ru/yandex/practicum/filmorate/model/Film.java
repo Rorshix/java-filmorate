@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @Builder
 public class Film {
-    private final Set<Long> userLikes = new LinkedHashSet<>();
+    private final Set<Integer> userLikes = new LinkedHashSet<>();
     private Integer id;
     @EqualsAndHashCode.Exclude
     @NotBlank(message = "Не должно быть пустым")
@@ -28,7 +28,7 @@ public class Film {
     private LocalDate releaseDate;
     @EqualsAndHashCode.Exclude
     @Positive(message = "Должно быть больше нуля")
-    private Long duration;
+    private Integer duration;
 
     public void setId(Integer generateId) {
     }

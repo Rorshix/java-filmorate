@@ -19,6 +19,11 @@ public class InMemoryFilmStorage implements FilmStorage {
 	}
 
 	@Override
+	public void removeAllFilms() {
+		films.clear();
+	}
+
+	@Override
 	public Film getFilmById(Integer id) {
 		return films.get(id);
 	}
@@ -36,7 +41,12 @@ public class InMemoryFilmStorage implements FilmStorage {
 		return film;
 	}
 
-	public Integer generateId() {
+	@Override
+	public void removeFilmById(Integer id) {
+		films.remove(id);
+	}
+
+	private Integer generateId() {
 		return globalId++;
 	}
 }
