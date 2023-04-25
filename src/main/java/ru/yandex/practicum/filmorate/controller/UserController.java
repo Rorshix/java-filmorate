@@ -36,7 +36,6 @@ public class UserController {
         return userService.getUserById(Long.valueOf(id));
     }
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@Valid @RequestBody User user) {
