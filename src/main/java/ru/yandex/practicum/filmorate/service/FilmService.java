@@ -9,9 +9,8 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class FilmService {
 
     public Film updateFilm(Film film) {
         if (film.getId() == null || !filmStorage.getAllFilms().contains(film)) {
-            throw new NotFoundException ("Фильм не найден");
+            throw new NotFoundException("Фильм не найден");
         }
         return filmStorage.updateFilm(film);
     }
