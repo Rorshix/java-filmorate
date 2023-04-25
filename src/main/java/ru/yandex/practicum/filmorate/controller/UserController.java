@@ -25,7 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User>getAllUsers() {
+    public List<User> getAllUsers() {
         log.debug("Получен запрос GET /users.");
         return userService.getAllUsers();
     }
