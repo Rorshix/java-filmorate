@@ -25,21 +25,21 @@ public class FilmService {
     public Film getFilmById(Long id) {
         Film film = filmStorage.getFilmById(id);
         if (film == null) {
-            throw new NotFoundException ("Фильм не найден");
+            throw new NotFoundException("Фильм не найден");
         }
         return film;
     }
 
     public Film putFilm(Film film) {
         if (filmStorage.getAllFilms().contains(film)) {
-            throw new ValidationException ("Фильм уже присутствует в медиатеке");
+            throw new ValidationException("Фильм уже присутствует в медиатеке");
         }
         return filmStorage.putFilm(film);
     }
 
     public Film updateFilm(Film film) {
         if (film.getId() == null || !filmStorage.getAllFilms().contains(film)) {
-            throw new NotFoundException ("Фильм не найден");
+            throw new NotFoundException("Фильм не найден");
         }
         return filmStorage.updateFilm(film);
     }
@@ -47,14 +47,14 @@ public class FilmService {
     private void checkUserId(Long userId) {
         User user = userStorage.getUserById(userId);
         if (userId == null || user == null) {
-            throw new NotFoundException ("Пользователь не найден");
+            throw new NotFoundException("Пользователь не найден");
         }
 
     }
     private Film checkAndReturnFilm(Long filmId) {
         Film film = filmStorage.getFilmById(filmId);
         if (filmId == null || film == null) {
-            throw new NotFoundException ("Фильм не найден");
+            throw new NotFoundException("Фильм не найден");
         }
         return film;
     }
