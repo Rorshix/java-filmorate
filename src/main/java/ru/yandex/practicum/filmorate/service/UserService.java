@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -46,4 +47,11 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
+    private User checkAndReturnUser(Long userId) {
+        User user = userStorage.getUserById(userId);
+        if (userId == null || user == null) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+        return user;
+    }
 }

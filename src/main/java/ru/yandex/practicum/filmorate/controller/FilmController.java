@@ -48,7 +48,6 @@ import java.util.List;
         @PutMapping
         public Film updateFilm(@Valid @RequestBody Film film) {
             log.debug("Получен запрос PUT /films.");
-
             log.debug("Фильм успешно обновлен!");
             return filmService.updateFilm(film);
         }

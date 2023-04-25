@@ -10,8 +10,8 @@ import java.util.Map;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
 
-	private final Map<Long,Film> films = new HashMap<>();
-	private Long globalId = 1L;
+	private final Map <Integer, Film> films = new HashMap <> ();
+	private Integer globalId;
 
 	@Override
 	public List<Film> getAllFilms() {
@@ -25,18 +25,18 @@ public class InMemoryFilmStorage implements FilmStorage {
 
 	@Override
 	public Film putFilm(Film film) {
-		film.setId(Math.toIntExact(generateId()));
-		films.put(Long.valueOf(film.getId()), film);
+		film.setId(generateId());
+		films.put(film.getId(), film);
 		return film;
 	}
 
 	@Override
 	public Film updateFilm(Film film) {
-		films.put(Long.valueOf(film.getId()), film);
+		films.put(film.getId(), film);
 		return film;
 	}
 
-	private Long generateId() {
+	private Integer generateId() {
 		return globalId++;
 	}
 }
