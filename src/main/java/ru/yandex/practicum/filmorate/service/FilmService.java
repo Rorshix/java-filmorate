@@ -49,8 +49,8 @@ public class FilmService {
         if (userId == null || user == null) {
             throw new NotFoundException("Пользователь не найден");
         }
-
     }
+
     private Film checkAndReturnFilm(Long filmId) {
         Film film = filmStorage.getFilmById(filmId);
         if (filmId == null || film == null) {
