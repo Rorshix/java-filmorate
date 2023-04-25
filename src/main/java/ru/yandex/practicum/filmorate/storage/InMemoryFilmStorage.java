@@ -10,7 +10,7 @@ import java.util.Map;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
 
-	private final Map <Integer, Film> films = new HashMap <> ();
+	private final Map<Integer, Film> films = new HashMap <>();
 	private Integer globalId;
 
 	@Override
