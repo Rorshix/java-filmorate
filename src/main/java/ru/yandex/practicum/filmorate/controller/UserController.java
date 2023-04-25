@@ -25,32 +25,28 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List < User > getAllUsers() {
-        log.debug ( "Получен запрос GET /users." );
-
-        return userService.getAllUsers ();
+    public List<User>getAllUsers() {
+        log.debug("Получен запрос GET /users.");
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable Integer id) {
-        log.debug ( "Получен запрос GET /users/{id}" );
-
-        return userService.getUserById ( Long.valueOf ( id ) );
+        log.debug("Получен запрос GET /users/{id}");
+        return userService.getUserById(Long.valueOf(id));
     }
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@Valid @RequestBody User user) {
-        log.debug ( "Получен запрос POST /users." );
-
-        return userService.putUser ( user );
+        log.debug("Получен запрос POST /users.");
+        return userService.putUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        log.debug ( "Получен запрос PUT /users." );
-
-        return userService.updateUser ( user );
+        log.debug("Получен запрос PUT /users.");
+        return userService.updateUser(user);
     }
 }
