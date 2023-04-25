@@ -26,14 +26,14 @@ public class InMemoryUserStorage implements UserStorage {
 
 	@Override
 	public User putUser(User user) {
-		user.setId( Math.toIntExact(generateId()));
-		users.put( Long.valueOf(user.getId()), user);
+		user.setId(Math.toIntExact(generateId()));
+		users.put(Long.valueOf(user.getId()), user);
 		return user;
 	}
 
 	@Override
 	public User updateUser(User user) {
-		users.put( Long.valueOf(user.getId()), user);
+		users.put(Long.valueOf(user.getId()), user);
 		return user;
 	}
 

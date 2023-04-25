@@ -21,14 +21,14 @@ public class UserService {
     public User getUserById(Long id) {
         User user = userStorage.getUserById(id);
         if (user == null) {
-            throw new NotFoundException ("Пользователь не найден");
+            throw new NotFoundException("Пользователь не найден");
         }
         return user;
     }
 
     public User putUser(User user) {
         if (userStorage.getAllUsers().contains(user)) {
-            throw new ValidationException ("Пользователь уже присутствует в базе данных");
+            throw new ValidationException("Пользователь уже присутствует в базе данных");
         }
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
@@ -38,7 +38,7 @@ public class UserService {
 
     public User updateUser(User user) {
         if (user.getId() == null || !userStorage.getAllUsers().contains(user)) {
-            throw new NotFoundException ("Пользователь не найден");
+            throw new NotFoundException("Пользователь не найден");
         }
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
