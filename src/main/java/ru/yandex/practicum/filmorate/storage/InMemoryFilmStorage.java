@@ -19,11 +19,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 	}
 
 	@Override
-	public void removeAllFilms() {
-		films.clear ();
-	}
-
-	@Override
 	public Film getFilmById(Long id) {
 		return films.get ( id );
 	}
@@ -39,11 +34,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 	public Film updateFilm(Film film) {
 		films.put ( Long.valueOf ( film.getId () ), film );
 		return film;
-	}
-
-	@Override
-	public void removeFilmById(Long id) {
-		films.remove ( id );
 	}
 
 	private Long generateId() {

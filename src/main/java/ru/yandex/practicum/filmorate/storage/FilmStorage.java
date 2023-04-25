@@ -8,13 +8,10 @@ public interface FilmStorage {
 
     List<Film> getAllFilms();
 
-    void removeAllFilms();
-
     Film getFilmById(Long id);
 
     Film putFilm(Film task);
 
     Film updateFilm(Film task);
 
-    void removeFilmById(Long id);
 }
