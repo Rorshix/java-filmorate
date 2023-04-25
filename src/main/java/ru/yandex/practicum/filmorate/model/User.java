@@ -28,6 +28,4 @@ public class User {
     @EqualsAndHashCode.Exclude
     private String name;
 
-    public void setId(Integer generateId) {
-    }
 }

@@ -30,6 +30,4 @@ public class Film {
     @Positive(message = "Должно быть больше нуля")
     private Integer duration;
 
-    public void setId(Integer generateId) {
-    }
 }
