@@ -28,13 +28,12 @@ import java.util.List;
         @GetMapping
         public List<Film> getAllFilms() {
             log.debug("Получен запрос GET /films.");
-            return filmService.getAllFilms ();
+            return filmService.getAllFilms();
         }
 
         @GetMapping("/{id}")
         public Film getFilm(@PathVariable Integer id) {
             log.debug("Получен запрос GET /films/{id}");
-
             return filmService.getFilmById(Long.valueOf(id));
         }
 
