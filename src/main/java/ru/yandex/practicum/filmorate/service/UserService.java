@@ -19,7 +19,7 @@ public class UserService {
         return userStorage.getAllUsers();
     }
 
-    public User getUserById(Long id) {
+    public User getUserById(Integer id) {
         User user = userStorage.getUserById(id);
         if (user == null) {
             throw new NotFoundException("Пользователь не найден");
@@ -47,7 +47,7 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    private User checkAndReturnUser(Long userId) {
+    private User checkAndReturnUser(Integer userId) {
         User user = userStorage.getUserById(userId);
         if (userId == null || user == null) {
             throw new NotFoundException("Пользователь не найден");

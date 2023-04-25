@@ -34,7 +34,7 @@ import java.util.List;
         @GetMapping("/{id}")
         public Film getFilm(@PathVariable Integer id) {
             log.debug("Получен запрос GET /films/{id}");
-            return filmService.getFilmById(Long.valueOf(id));
+            return filmService.getFilmById(Integer.valueOf(id));
         }
 
         @PostMapping

@@ -1,33 +1,33 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.With;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@With
 @Data
-@AllArgsConstructor
+@Builder
 public class User {
+    private final Set<Long> friendsList = new LinkedHashSet<>();
     private Integer id;
-
-    @Email(message = "Email должен быть корректным адресом электронной почты")
-    @NotBlank(message = "Email не может быть пустым")
-    private String email;
-
-    @NotBlank(message = "Логин не может быть пустым")
+    @EqualsAndHashCode.Exclude
+    @Past(message = "Дата должна быть в прошлом")
+    private LocalDate birthday;
+    @EqualsAndHashCode.Exclude
+    @NotBlank(message = "Не должно быть пустым")
     private String login;
-
+    @EqualsAndHashCode.Exclude
+    @Email(message = "Должно содержать валидный email")
+    private String email;
+    @EqualsAndHashCode.Exclude
     private String name;
 
-    @NotNull(message = "Дата рождения не может быть пустой")
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    @PastOrPresent(message = "Дата рождения не может быть в будущем")
-    private LocalDate birthday;
+    public void setId(Integer generateId) {
+    }
 }

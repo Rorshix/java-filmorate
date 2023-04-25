@@ -1,35 +1,35 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.With;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.EqualsAndHashCode;
+import ru.yandex.practicum.filmorate.validator.FilmValidator;
 
 import javax.validation.constraints.NotBlank;
-
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
-@With
-@AllArgsConstructor
+@Builder
 public class Film {
+    private final Set<Long> userLikes = new LinkedHashSet<>();
     private Integer id;
-
-    @NotBlank(message = "Имя не может быть пустым")
+    @EqualsAndHashCode.Exclude
+    @NotBlank(message = "Не должно быть пустым")
     private String name;
-
-    @Size(min = 1, max = 200)
+    @EqualsAndHashCode.Exclude
+    @Size(max = 200, message = "Количество символов должно быть менее 200")
     private String description;
-
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @EqualsAndHashCode.Exclude
+    @FilmValidator
     private LocalDate releaseDate;
+    @EqualsAndHashCode.Exclude
+    @Positive(message = "Должно быть больше нуля")
+    private Long duration;
 
-    @Positive(message = "Продолжительность фильма должна быть положительной")
-    private Integer duration;
-
-    public Integer setId(Integer generateId) {
-        return generateId;
+    public void setId(Integer generateId) {
     }
 }
