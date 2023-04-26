@@ -8,8 +8,8 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 
 public class Validator {
-	private final static int MAX_DESCRIPTION_LENGTH = 200;
-	private final static LocalDate LATEST_RELEASE_DATE = LocalDate.of(1895, 12, 28);
+	private static int MAX_DESCRIPTION_LENGTH = 200;
+	private  static LocalDate LATEST_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
 	public static void validateFilm(Film film) {
 		validateFilmName(film.getName());
