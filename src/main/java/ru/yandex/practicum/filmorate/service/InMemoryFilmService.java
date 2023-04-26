@@ -30,7 +30,7 @@ public class InMemoryFilmService implements FilmService {
 	}
 
 	@Override
-	public Film updateFilm(Film film){
+	public Film updateFilm(Film film) {
 		Validator.validateFilm(film);
 		if (filmStorage.getFilm(film.getId()) == null) {
 			throw new FilmNotFoundException("Такого фильма нет");
