@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.validator.Validator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,18 +21,20 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film addFilm(Film film) {
+        Validator.validateFilm (film);
         if (!film.getReleaseDate().isBefore(DATE_FIRST_RELEASE)) {
             id++;
             film.setId(id);
             films.put(film.getId(), film);
         } else {
-            throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
+            throw new ValidationException( HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
         }
         return film;
     }
 
     @Override
     public Film updateFilm(Integer id, Film film) {
+        Validator.validateFilm (film);
         if (films.containsKey(id)) {
             film.setId(id);
             films.put(id, film);

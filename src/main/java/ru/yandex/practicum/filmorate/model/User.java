@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.With;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @With
 @Data
 @AllArgsConstructor
+@SuperBuilder
 public class User {
     private Integer id;
 

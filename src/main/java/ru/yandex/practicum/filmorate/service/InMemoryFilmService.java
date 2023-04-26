@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.validator.Validator;
+
 import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +21,7 @@ public class InMemoryFilmService implements FilmService {
 
 	@Override
 	public Film addFilm(Film newFilm) {
+		Validator.validateFilm(newFilm);
 		Film film = filmStorage.addFilm(newFilm);
 		if (film == null) {
 			throw new FilmNotFoundException("Такого фильма нет");
@@ -29,6 +32,7 @@ public class InMemoryFilmService implements FilmService {
 
 	@Override
 	public Film updateFilm(Film film) throws ChangeSetPersister.NotFoundException {
+		Validator.validateFilm(film);
 		if (filmStorage.getFilm(film.getId()) == null) {
 			throw new FilmNotFoundException("Такого фильма нет");
 		}

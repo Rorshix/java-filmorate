@@ -2,16 +2,17 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.With;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
-@With
 @AllArgsConstructor
+@SuperBuilder
 public class Film {
     private Integer id;
 
@@ -26,5 +27,4 @@ public class Film {
 
     @Positive(message = "Продолжительность фильма должна быть положительной")
     private Integer duration;
-
 }

@@ -3,6 +3,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.validator.Validator;
 
 import java.util.List;
 
@@ -22,7 +23,6 @@ public class InMemoryUserService implements UserService {
 	@Override
 	public User getUser(Integer id) {
 		User user = userStorage.getUser(id);
-
 		if (user == null) {
 			throw new UserNotFoundException("Такого пользователя нет");
 		}
@@ -32,12 +32,14 @@ public class InMemoryUserService implements UserService {
 
 	@Override
 	public User addUser(User newUser) {
+		Validator.validateUser(newUser);
 		checkUserName(newUser);
 		return userStorage.addUser(newUser);
 	}
 
 	@Override
 	public User updateUser(User user) {
+		Validator.validateUser(user);
 		if (userStorage.getUser(user.getId()) == null) {
 			throw new UserNotFoundException("Такого пользователя нет");
 		}
@@ -55,6 +57,7 @@ public class InMemoryUserService implements UserService {
 	}
 
 	private void checkUserName(User user) {
+		Validator.validateUser(user);
 		if (user.getName() == null || user.getName().isBlank()) {
 			user.setName(user.getLogin());
 		}

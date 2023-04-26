@@ -1,10 +1,12 @@
 package ru.yandex.practicum.filmorate.storage;
 
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
+        Validator.validateUser(user);
         if ((user.getName() == null) || (user.getName().isBlank())) {
             user.setName(user.getLogin());
         }
@@ -26,13 +29,14 @@ public class InMemoryUserStorage implements UserStorage {
             user.setId(id);
             users.put(user.getId(), user);
         } else {
-            throw new ValidationException("Логин не может содержать пробелы");
+            throw new ValidationException( HttpStatus.BAD_REQUEST, "Логин не может содержать пробелы");
         }
         return user;
     }
 
     @Override
     public User updateUser(Integer id, User user) {
+        Validator.validateUser(user);
         if (users.containsKey(id)) {
             user.setId(id);
             users.put(id, user);
