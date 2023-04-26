@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.validator;
 
 import org.springframework.http.HttpStatus;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.exception.ValidationExceptionHttp;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
