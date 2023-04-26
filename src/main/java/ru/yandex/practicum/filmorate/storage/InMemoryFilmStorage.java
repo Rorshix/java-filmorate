@@ -27,7 +27,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             film.setId(id);
             films.put(film.getId(), film);
         } else {
-            throw new ValidationException( HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
         }
         return film;
     }
