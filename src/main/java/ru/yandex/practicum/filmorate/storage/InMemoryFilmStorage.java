@@ -21,20 +21,20 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film addFilm(Film film) {
-        Validator.validateFilm (film);
+        Validator.validateFilm(film);
         if (!film.getReleaseDate().isBefore(DATE_FIRST_RELEASE)) {
             id++;
             film.setId(id);
             films.put(film.getId(), film);
         } else {
-            throw new ValidationException( HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
         }
         return film;
     }
 
     @Override
     public Film updateFilm(Integer id, Film film) {
-        Validator.validateFilm (film);
+        Validator.validateFilm(film);
         if (films.containsKey(id)) {
             film.setId(id);
             films.put(id, film);
