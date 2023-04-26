@@ -29,7 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
             user.setId(id);
             users.put(user.getId(), user);
         } else {
-            throw new ValidationException( HttpStatus.BAD_REQUEST, "Логин не может содержать пробелы");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "Логин не может содержать пробелы");
         }
         return user;
     }
