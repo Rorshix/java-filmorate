@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.MissingException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.validator.Validator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,9 +17,9 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     private int filmId;
     private final Map<Integer, Film> films;
+
     @Override
     public Film addFilm(Film film) {
-
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Данные в запросе на добавление нового фильма не соответствуют критериям.");
         }
