@@ -90,14 +90,14 @@ public class Validator {
 		}
 	}
 
-	private static void validateUserId(int userId ) {
+	private static void validateUserId(int userId) {
 		if (userId == 0) {
 			throw new ValidationException(HttpStatus.BAD_REQUEST,
 					"ID пользователя не должно быть пустым.");
 		}
 	}
 
-	private static void validateFilmId(int filmId ) {
+	private static void validateFilmId(int filmId) {
 		if (filmId == 0) {
 			throw new ValidationException(HttpStatus.BAD_REQUEST,
 					"ID фильма не должно быть пустым.");
