@@ -58,7 +58,7 @@ public class FilmValidateTest {
 	void filmWthDescriptionWithMore200Symbols() {
 		film.setDescription("ffffffffffffffffffffffffffffffffffffffffffffffff" +
 						"fffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuu" +
-						"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu" +
+						"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu" +
 				"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 		Set<ConstraintViolation<Film>> violations = validator.validate(film);
 		assertFalse(violations.isEmpty());
