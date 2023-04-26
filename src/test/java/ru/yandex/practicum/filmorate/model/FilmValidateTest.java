@@ -1,78 +1,83 @@
 package ru.yandex.practicum.filmorate.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import java.time.LocalDate;
+
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FilmValidateTest {
+	private FilmStorage filmStorage;
+	private Film film;
+	private Validator validator;
 
-	public static void validateInput(Film film) {
+	@BeforeEach
+	void setUp() {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
+		validator = factory.getValidator();
+
+		filmStorage = new InMemoryFilmStorage();
+
+		film = new Film(1, "New film", "Description",
+				LocalDate.of(2021, 12, 16), 15);
+
+		film.setId(1);
+		film.setName("Гаррии Поттер");
+		film.setDescription("1 часть");
+		film.setReleaseDate(LocalDate.of(2021, 12, 16));
+		film.setDuration(148);
+	}
+
+	@Test
+	void filmWithoutNameNull() {
+		film.setName(null);
+
 		Set<ConstraintViolation<Film>> violations = validator.validate(film);
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(violations);
-		}
+		assertFalse(violations.isEmpty());
 	}
 
 	@Test
-	public void shouldThrowExceptionWhenNameEmpty() {
-		Film film = Film.builder()
-				.name("")
-				.description("Узник Азкабана")
-				.releaseDate(LocalDate.of(2009, 12, 18))
-				.duration(162)
-				.build();
-		ConstraintViolationException ex = assertThrows(
-				ConstraintViolationException.class,
-				() -> validateInput(film)
-		);
+	void filmWithoutNameEmptyString() {
+		film.setName("");
+
+		Set<ConstraintViolation<Film>> violations = validator.validate(film);
+		assertFalse(violations.isEmpty());
 	}
 
 	@Test
-	public void shouldThrowExceptionWhenTooLongDescription() {
-		Film film = Film.builder()
-				.name("Гарри Поттер")
-				.description("Узник Азкабана".repeat(30))
-				.releaseDate(LocalDate.of(2009, 12, 18))
-				.duration(162)
-				.build();
-		ConstraintViolationException ex = assertThrows(
-				ConstraintViolationException.class,
-				() -> validateInput(film)
-		);
+	void filmWthDescriptionWithMore200Symbols() {
+		film.setDescription("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+				+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"+
+				"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
+		Set<ConstraintViolation<Film>> violations = validator.validate(film);
+		assertFalse(violations.isEmpty());
 	}
 
 	@Test
-	public void shouldThrowExceptionWhenReleaseTooEarly() {
-		Film film = Film.builder()
-				.name("Аватар")
-				.description("Пандора")
-				.releaseDate(LocalDate.of(1700, 12, 18))
-				.duration(162)
-				.build();
-		ConstraintViolationException ex = assertThrows(
-				ConstraintViolationException.class,
-				() -> validateInput(film)
-		);
+	void releaseDateIsBefore28December1895() {
+		film.setReleaseDate(LocalDate.of(1894, 12,28));
+
+		assertThrows(ValidationException.class, () -> filmStorage.addFilm(film));
 	}
 
 	@Test
-	public void shouldThrowExceptionWhenReleaseInFuture() {
-		Film film = Film.builder()
-				.name("Гарри Поттер")
-				.description("Узник Азкабана")
-				.releaseDate(LocalDate.of(3000, 12, 18))
-				.duration(162)
-				.build();
-		ConstraintViolationException ex = assertThrows(
-				ConstraintViolationException.class,
-				() -> validateInput(film)
-		);
-	}
+	void durationFilmNegative() {
+		film.setDuration(-1);
 
+		Set<ConstraintViolation<Film>> violations = validator.validate(film);
+		assertFalse(violations.isEmpty());
+	}
 }

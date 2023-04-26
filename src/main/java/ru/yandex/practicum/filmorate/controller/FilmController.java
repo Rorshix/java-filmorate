@@ -2,42 +2,61 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
+
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/films")
-@RequiredArgsConstructor
 public class FilmController {
     private final FilmService filmService;
 
     @GetMapping
-    public Collection<Film> findAll() {
-        return filmService.getAllFilms();
-    }
-
-    @PostMapping
-    public Film create(@Valid @RequestBody Film film) {
-        Film createdFilm = filmService.putFilm(film);
-        log.debug("Фильм добавлен");
-        return createdFilm;
-    }
-
-    @PutMapping
-    public Film put(@Valid @RequestBody Film film) {
-        Film updatedFilm = filmService.updateFilm(film);
-        log.debug("Фильм обновлен");
-        return updatedFilm;
+    public List<Film> getAllFilms() {
+        log.debug("Получен запрос GET /films.");
+        return filmService.getListFilms();
     }
 
     @GetMapping("/{id}")
-    public Film getFilmById(@PathVariable(name = "id") Integer filmId) {
-        return filmService.getFilmById(filmId);
+    public Film getFilm(@PathVariable Integer id) {
+        log.debug("Получен запрос GET /films/{id}");
+        return filmService.getFilm(id);
     }
-}
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Film create(@Valid @RequestBody Film film) {
+        log.debug("Получен запрос POST /films.");
+        log.debug("Фильм успешно создан!");
+        return filmService.addFilm(film);
+    }
+
+    @PutMapping
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        log.debug("Получен запрос PUT /films.");
+        log.debug("Фильм успешно обновлен!");
+        return filmService.updateFilm(film);
+    }
+
+    @DeleteMapping("/{id}")
+    public Film deleteFilm(@PathVariable Integer id) {
+        log.debug("Получен запрос DELETE /films/{id}");
+        return filmService.deleteFilm(id);
+    }
+
+}

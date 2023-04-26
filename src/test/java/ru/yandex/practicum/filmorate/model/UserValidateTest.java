@@ -1,63 +1,94 @@
 package ru.yandex.practicum.filmorate.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
-import javax.validation.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 public class UserValidateTest {
+	private UserStorage userStorage;
+	private User user;
+	private Validator validator;
 
-	public static void validateInput(User user) {
+	@BeforeEach
+	void setUp() {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
+		validator = factory.getValidator();
+
+		userStorage = new InMemoryUserStorage();
+		user = new User(1, "aaa.bbb@yandex.ru", "aaaa", "bbb",
+				LocalDate.of(1995, 11, 23));
+
+		user.setId(1);
+		user.setEmail("v.chester@yandex.ru");
+		user.setLogin("Rorshix");
+		user.setName("Иван");
+		user.setBirthday(LocalDate.of(1995, 11, 23));
+	}
+
+	@Test
+	void emailMustContainsSymbolDog() {
+		user.setEmail("v.v.v.yandex.ru");
+
 		Set<ConstraintViolation<User>> violations = validator.validate(user);
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(violations);
-		}
+		assertFalse(violations.isEmpty());
 	}
 
 	@Test
-	public void shouldThrowExceptionWhenDateInFuture() {
-		User user1 = User.builder()
-				.birthday(LocalDate.of(3000, 8, 30))
-				.login("v.chester")
-				.email("v.chester.yandex.ru")
-				.build();
-		ConstraintViolationException ex = assertThrows(
-				ConstraintViolationException.class,
-				() -> validateInput(user1)
-		);
+	void emailNull() {
+		user.setEmail(null);
+
+		Set<ConstraintViolation<User>> violations = validator.validate(user);
+		assertFalse(violations.isEmpty());
 	}
 
 	@Test
-	public void shouldThrowExceptionWhenLoginIsEmpty() {
-		User user1 = User.builder()
-				.birthday(LocalDate.of(1992, 8, 30))
-				.login("")
-				.email("v.chester@yandex.ru")
-				.build();
-		ConstraintViolationException ex = assertThrows(
-				ConstraintViolationException.class,
-				() -> validateInput(user1)
-		);
+	void loginWithNull() {
+		user.setLogin(null);
+
+		Set<ConstraintViolation<User>> violations = validator.validate(user);
+		assertFalse(violations.isEmpty());
 	}
 
 	@Test
-	public void shouldThrowExceptionWhenEmailNotValid() {
-		User user1 = User.builder()
-				.birthday(LocalDate.of(1992, 8, 30))
-				.login("v.chest")
-				.email("111")
-				.build();
-		ConstraintViolationException ex = assertThrows(
-				ConstraintViolationException.class,
-				() -> validateInput(user1)
-		);
+	void loginEmpty() {
+		user.setLogin("");
+
+		Set<ConstraintViolation<User>> violations = validator.validate(user);
+		assertFalse(violations.isEmpty());
 	}
 
+	@Test
+	void loginWithOnlyBlank() {
+		user.setLogin(" ");
+
+		Set<ConstraintViolation<User>> violations = validator.validate(user);
+		assertFalse(violations.isEmpty());
+	}
+
+	@Test
+	void loginWithBlank() {
+		user.setLogin("Nick Name");
+
+		assertThrows(ValidationException.class, () -> userStorage.addUser(user));
+	}
+
+	@Test
+	void birthdayIsAfterNow() {
+		user.setBirthday(LocalDate.of(2023, 11, 10));
+
+		Set<ConstraintViolation<User>> violations = validator.validate(user);
+		assertFalse(violations.isEmpty());
+	}
 }
-
