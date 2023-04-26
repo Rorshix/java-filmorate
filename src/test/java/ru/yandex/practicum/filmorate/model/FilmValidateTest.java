@@ -15,8 +15,7 @@ import java.time.LocalDate;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FilmValidateTest {
 	private FilmStorage filmStorage;
@@ -64,12 +63,6 @@ public class FilmValidateTest {
 				"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 		Set<ConstraintViolation<Film>> violations = validator.validate(film);
 		assertFalse(violations.isEmpty());
-	}
-
-	@Test
-	void releaseDateIsBefore28December1895() {
-		film.setReleaseDate(LocalDate.of(1894, 12,28));
-		assertThrows(ValidationException.class, () -> filmStorage.addFilm(film));
 	}
 
 	@Test

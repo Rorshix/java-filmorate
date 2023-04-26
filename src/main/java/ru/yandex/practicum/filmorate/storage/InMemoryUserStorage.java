@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationExceptionHttp;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validator.Validator;
 
@@ -29,7 +30,7 @@ public class InMemoryUserStorage implements UserStorage {
             user.setId(id);
             users.put(user.getId(), user);
         } else {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Логин не может содержать пробелы");
+            throw new ValidationExceptionHttp(HttpStatus.BAD_REQUEST, "Логин не может содержать пробелы");
         }
         return user;
     }

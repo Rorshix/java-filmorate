@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.ValidationExceptionHttp;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.validator.Validator;
 
@@ -27,7 +28,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             film.setId(id);
             films.put(film.getId(), film);
         } else {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
+            throw new ValidationExceptionHttp(HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
         }
         return film;
     }
