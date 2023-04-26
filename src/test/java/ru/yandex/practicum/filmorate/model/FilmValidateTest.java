@@ -58,10 +58,10 @@ public class FilmValidateTest {
 
 	@Test
 	void filmWthDescriptionWithMore200Symbols() {
-		film.setDescription("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-				+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"+
+		film.setDescription("ffffffffffffffffffffffffffffffffffffffffffffffff" +
+						"fffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuu" +
+						"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu" +
 				"fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-
 		Set<ConstraintViolation<Film>> violations = validator.validate(film);
 		assertFalse(violations.isEmpty());
 	}
@@ -69,14 +69,12 @@ public class FilmValidateTest {
 	@Test
 	void releaseDateIsBefore28December1895() {
 		film.setReleaseDate(LocalDate.of(1894, 12,28));
-
 		assertThrows(ValidationException.class, () -> filmStorage.addFilm(film));
 	}
 
 	@Test
 	void durationFilmNegative() {
 		film.setDuration(-1);
-
 		Set<ConstraintViolation<Film>> violations = validator.validate(film);
 		assertFalse(violations.isEmpty());
 	}
