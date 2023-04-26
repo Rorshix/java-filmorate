@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -31,7 +30,7 @@ public class InMemoryFilmService implements FilmService {
 	}
 
 	@Override
-	public Film updateFilm(Film film) throws ChangeSetPersister.NotFoundException {
+	public Film updateFilm(Film film){
 		Validator.validateFilm(film);
 		if (filmStorage.getFilm(film.getId()) == null) {
 			throw new FilmNotFoundException("Такого фильма нет");
@@ -41,8 +40,9 @@ public class InMemoryFilmService implements FilmService {
 	}
 
 	@Override
-	public Film deleteFilm(Integer id) throws ChangeSetPersister.NotFoundException {
-		Film film = filmStorage.deleteFilm(id);
+	public Film deleteFilm(Integer id) {
+		Film film = null;
+		film = filmStorage.deleteFilm(id);
 		if (film == null) {
 			throw new FilmNotFoundException("Такого фильма нет");
 		}
