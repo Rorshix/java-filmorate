@@ -1,18 +1,34 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public interface FilmService {
-    Film addFilm(Film film);
+@RequiredArgsConstructor
+@Service
+public class FilmService {
 
-    Film updateFilm(Film film);
+    private final FilmStorage filmStorage;
 
-    Film deleteFilm(Integer id);
+    public Collection<Film> getFilms() {
+        return filmStorage.getFilms();
+    }
 
-    Film getFilm(Integer id);
+    public Film getFilmById(Integer id) { // Получение фильма по id
+        return filmStorage.getFilmById(id);
+    }
 
-    List<Film> getListFilms();
+    public Film addFilm(Film film) {
+        return filmStorage.addFilm(film);
+    }
 
+    public Film updateFilm(Film film) {
+        return filmStorage.updateFilm(film);
+    }
 }

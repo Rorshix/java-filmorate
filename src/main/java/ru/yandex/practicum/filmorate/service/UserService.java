@@ -1,18 +1,42 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.MissingException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public interface UserService {
-    List<User> getAll();
+@RequiredArgsConstructor
+@Service
+public class UserService {
 
-    User getUser(Integer id);
+    private final UserStorage userStorage;
 
-    User addUser(User user);
+    public User getCustomersDyId(Integer id) {
+        return userStorage.getUserById(id);
+    }
 
-    User updateUser(User user);
+    public Collection<User> getCustomers() {
+        return userStorage.getUsers();
+    }
 
-    User delUser(Integer id);
+    public User addUsers(User user) {
+        if (user.getName() == null || user.getName().equals("")) {
+            user.setName(user.getLogin());
+        }
+        return userStorage.addUsers(user);
+    }
 
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
+    }
+
+    public void deliteUserById(Integer id) {
+        userStorage.deliteUserById(id);
+    }
 }

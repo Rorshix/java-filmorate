@@ -1,72 +1,64 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationExceptionHttp;
+import ru.yandex.practicum.filmorate.exception.MissingException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.validator.Validator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component("InMemoryFilmStorage")
+@Component
+@RequiredArgsConstructor
 public class InMemoryFilmStorage implements FilmStorage {
-    private final Map<Integer, Film> films = new HashMap<>();
-    private static final LocalDate DATE_FIRST_RELEASE = LocalDate.of(1895, 12, 28);
-    private int id;
+
+    private int filmId;
+    private final Map<Integer, Film> films;
 
     @Override
     public Film addFilm(Film film) {
-        Validator.validateFilm(film);
-        if (!film.getReleaseDate().isBefore(DATE_FIRST_RELEASE)) {
-            id++;
-            film.setId(id);
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new ValidationException("Данные в запросе на добавление нового фильма не соответствуют критериям.");
+        }
+        filmId++;
+        film.setId(filmId);
+        films.put(film.getId(), film);
+        return film;
+    }
+
+    @Override
+    public Film updateFilm(Film film) {
+        if (films.containsKey(film.getId())) {
             films.put(film.getId(), film);
+            return film;
         } else {
-            throw new ValidationExceptionHttp(HttpStatus.BAD_REQUEST, "Дата релиза не может быть раньше 28 декабря 1895 года");
+            throw new MissingException("Фильм, который Вы пытаетесь обновить, отсутствует в базе.");
         }
-        return film;
     }
 
     @Override
-    public Film updateFilm(Integer id, Film film) {
-        Validator.validateFilm(film);
+    public void deliteFilmById(int id) {
         if (films.containsKey(id)) {
-            film.setId(id);
-            films.put(id, film);
-        } else {
-            throw new FilmNotFoundException("Такого фильма нет");
-        }
-        return film;
-    }
-
-    @Override
-    public Film deleteFilm(Integer id) {
-        if (!films.containsKey(id)) {
-            throw new FilmNotFoundException("Такого фильма нет");
-        } else {
-            Film removeFilm = films.get(id);
             films.remove(id);
-            return removeFilm;
-        }
-    }
-
-    @Override
-    public Film getFilm(Integer id) {
-        if (films.containsKey(id)) {
-            return films.get(id);
         } else {
-            throw new FilmNotFoundException("Такого фильма нет");
+            throw new ValidationException("Фильм, который Вы пытаетесь удалить, отсутствует в базе.");
         }
     }
 
     @Override
-    public List<Film> getListFilms() {
+    public List<Film> getFilms() {
         return new ArrayList<>(films.values());
     }
 
+    @Override
+    public Film getFilmById(int id) throws MissingException {
+        if (films.containsKey(id)) {
+            return films.get(id);
+        } else {
+            throw new MissingException(String.format("Фильм с id %s отсуствует в базе", id));
+        }
+    }
 }

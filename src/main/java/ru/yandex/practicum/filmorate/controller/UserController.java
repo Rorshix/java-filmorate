@@ -2,59 +2,45 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.MissingException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
-
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        log.debug("Получен запрос GET /users.");
-        return userService.getAll();
+    public Collection<User> getCustomers() { // Получение всех юзеров
+        return userService.getCustomers();
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Integer id) {
-        log.debug("Получен запрос GET /users/{id}");
-        return userService.getUser(id);
+    public User getCustomersDyId(@PathVariable("id") Integer id) throws MissingException { // Получение юзера по id
+        return userService.getCustomersDyId(id);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Valid @RequestBody User user) {
-        log.debug("Получен запрос POST /users.");
-        return userService.addUser(user);
+    @PostMapping()
+    public User addUsers(@Valid @RequestBody User user) throws ValidationException {
+        return userService.addUsers(user);
     }
 
-    @PutMapping
-    public User updateUser(@Valid @RequestBody User user) {
-        log.debug("Получен запрос PUT /users.");
+    @PutMapping()
+    public User updateUser(@Valid @RequestBody User user) throws ValidationException, MissingException {
         return userService.updateUser(user);
     }
 
-    @DeleteMapping("/{id}")
-    public User delUser(@PathVariable Integer id) {
-        log.debug("Получен запрос DELETE /users.");
-        return userService.delUser(id);
+    @PutMapping("/{id}")
+    public void deliteUserById(@PathVariable("id") Integer id) throws ValidationException {
+        userService.deliteUserById(id);
     }
-
 }

@@ -2,62 +2,39 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
 
 @Slf4j
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
+
     private final FilmService filmService;
 
     @GetMapping
-    public List<Film> getAllFilms() {
-        log.debug("Получен запрос GET /films.");
-        return filmService.getListFilms();
+    public Collection<Film> getFilms() {
+        return filmService.getFilms();
     }
 
     @GetMapping("/{id}")
-    public Film getFilm(@PathVariable Integer id) {
-        log.debug("Получен запрос GET /films/{id}");
-        return filmService.getFilm(id);
+    public Film getFilmById(@PathVariable("id") Integer id) { // Получение фильма по id
+        return filmService.getFilmById(id);
+
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Film create(@Valid @RequestBody Film film) {
-        log.debug("Получен запрос POST /films.");
-        log.debug("Фильм успешно создан!");
+    @PostMapping()
+    public Film addFilm(@Valid @RequestBody Film film) {
         return filmService.addFilm(film);
     }
 
-    @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) throws ChangeSetPersister.NotFoundException {
-        log.debug("Получен запрос PUT /films.");
-        log.debug("Фильм успешно обновлен!");
+    @PutMapping()
+    public Film updateFilm(@Valid @RequestBody Film film) {
         return filmService.updateFilm(film);
     }
-
-    @DeleteMapping("/{id}")
-    public Film deleteFilm(@PathVariable Integer id) throws ChangeSetPersister.NotFoundException {
-        log.debug("Получен запрос DELETE /films/{id}");
-        return filmService.deleteFilm(id);
-    }
-
 }

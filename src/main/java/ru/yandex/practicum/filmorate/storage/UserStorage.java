@@ -1,20 +1,20 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.List;
+import java.util.Collection;
 
+@Component
 public interface UserStorage {
-    User addUser(User user);
+    User addUsers(User user);
 
-    User updateUser(Integer id, User user);
+    User updateUser(User user);
 
-    User delUser(Integer id);
+    void deliteUserById(int userId);
 
-    User getUser(Integer id);
+    User getUserById(int userId);
 
-    List<User> getListUsers();
-
-    User getByEmail(String email);
+    Collection<User> getUsers();
 
 }

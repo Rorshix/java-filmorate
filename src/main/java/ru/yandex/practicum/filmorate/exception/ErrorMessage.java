@@ -1,12 +1,9 @@
 package ru.yandex.practicum.filmorate.exception;
 
-import lombok.Getter;
 
-@Getter
+import lombok.Data;
+
+@Data
 public class ErrorMessage {
     private final String error;
-
-    public ErrorMessage(String error) {
-        this.error = error;
-    }
 }
