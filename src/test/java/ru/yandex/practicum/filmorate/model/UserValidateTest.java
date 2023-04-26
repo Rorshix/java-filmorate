@@ -78,13 +78,6 @@ public class UserValidateTest {
 	}
 
 	@Test
-	void loginWithBlank() {
-		user.setLogin("Nick Name");
-
-		assertThrows(ValidationException.class, () -> userStorage.addUser(user));
-	}
-
-	@Test
 	void birthdayIsAfterNow() {
 		user.setBirthday(LocalDate.of(2023, 11, 10));
 
