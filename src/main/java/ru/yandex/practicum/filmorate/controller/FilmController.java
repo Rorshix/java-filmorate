@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,14 +48,14 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {
+    public Film updateFilm(@Valid @RequestBody Film film) throws ChangeSetPersister.NotFoundException {
         log.debug("Получен запрос PUT /films.");
         log.debug("Фильм успешно обновлен!");
         return filmService.updateFilm(film);
     }
 
     @DeleteMapping("/{id}")
-    public Film deleteFilm(@PathVariable Integer id) {
+    public Film deleteFilm(@PathVariable Integer id) throws ChangeSetPersister.NotFoundException {
         log.debug("Получен запрос DELETE /films/{id}");
         return filmService.deleteFilm(id);
     }
