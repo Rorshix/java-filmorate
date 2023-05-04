@@ -8,7 +8,7 @@ import java.util.*;
 @Component
 public class InMemoryUserStorage implements UserStorage {
     private int generator = 0;
-    private final Map<Integer, User> allUsers = new HashMap<>();
+    private Map<Integer, User> allUsers = new HashMap<>();
 
     @Override
     public User get(int userId) {
@@ -27,5 +27,17 @@ public class InMemoryUserStorage implements UserStorage {
         }
         allUsers.put(user.getId(), user);
         return user;
+    }
+
+    @Override
+    public void addFriend(User user, User friend) {
+        user.getFriendsId().add(friend.getId());
+        friend.getFriendsId().add(user.getId());
+    }
+
+    @Override
+    public void deleteFriends(User user, User friend) {
+        user.getFriendsId().remove(friend.getId());
+        friend.getFriendsId().remove(user.getId());
     }
 }
