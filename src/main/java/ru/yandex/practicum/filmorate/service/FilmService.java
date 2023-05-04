@@ -57,7 +57,7 @@ public class FilmService {
             Film film = getFilmOnId(filmId);
             filmStorage.deleteLike(film, user);
         } else {
-            throw new MissingException ("Пользователь с ID: " + userId
+            throw new MissingException("Пользователь с ID: " + userId
                     + "не ставил лайк фильму с ID: " + filmId);
         }
     }
