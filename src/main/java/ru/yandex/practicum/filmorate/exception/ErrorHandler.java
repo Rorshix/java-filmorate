@@ -14,20 +14,20 @@ public class ErrorHandler {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorMessage handleNotFoundException(MissingException notFoundException) {
 		log.info("404 {}", notFoundException.getMessage());
-		return new ErrorMessage (notFoundException.getMessage());
+		return new ErrorMessage(notFoundException.getMessage());
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage handleBadRequestException(FilmsAndUsersValidationException validationException) {
 		log.info("400 {}", validationException.getMessage());
-		return new ErrorMessage (validationException.getMessage());
+		return new ErrorMessage(validationException.getMessage());
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErrorMessage handleInternalServerError(ValidationException internalServerError) {
 		log.info("500 {}", internalServerError.getMessage());
-		return new ErrorMessage (internalServerError.getMessage());
+		return new ErrorMessage(internalServerError.getMessage());
 	}
 }
