@@ -74,6 +74,7 @@ public class UserService {
                 .forEach(id -> commonFriends.add(userStorage.getUserById(id)));
         return commonFriends;
     }
+
     public void validateUser(User user) throws IllegalArgumentException {
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new FilmsAndUsersValidationException("Не верная дата рождения. Дата не может быть в будущем.");
