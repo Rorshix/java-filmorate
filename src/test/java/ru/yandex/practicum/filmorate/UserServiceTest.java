@@ -8,21 +8,16 @@ import ru.yandex.practicum.filmorate.exception.FilmsAndUsersValidationException;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserServiceTest {
 
-    UserService userService = new UserService();
+    UserService userService;
     User user;
-
-    @BeforeEach
-    void createUserForTest() {
-        user = new User(1, "Imia", LocalDate.of(2000, 10, 11),
-                "mail@mail.com", "log");
-    }
-
     @Test
     void shouldCreateUserWithIncorrectEmailWithoutDog() {
         user.setEmail("mailmail.com");

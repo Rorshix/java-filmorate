@@ -1,94 +1,79 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.FilmsAndUsersValidationException;
 import ru.yandex.practicum.filmorate.exception.MissingException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.exception.FilmsAndUsersValidationException;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
-@Slf4j
+@RequiredArgsConstructor
 @Service
 public class UserService {
-    @Autowired
-    public UserStorage userStorage;
 
-    public User get(int userId) {
-        final User user = userStorage.get(userId);
-        if (user == null) {
-            throw new MissingException("User with id= " + userId + "not found");
+    private final UserStorage userStorage;
+
+    public User getCustomersDyId(Integer id) {
+        return userStorage.getUserById(id);
+    }
+
+    public Collection<User> getCustomers() {
+        return userStorage.getUsers();
+    }
+
+    public User addUsers(User user) {
+        if (user.getName() == null || user.getName().equals("")) {
+            user.setName(user.getLogin());
         }
-        return user;
+        return userStorage.addUsers(user);
     }
 
-    public List<User> getAllUsers() {
-        return userStorage.getAllUsersList();
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
     }
 
-    public List<User> getALlFriends(int userId) {
-        List<User> friends = new ArrayList<>();
-        if (userStorage.getAllUsersList().isEmpty() || userStorage.getAllUsersList() == null) {
-            throw new ValidationException("В списке пользователей ещё нет пользователей");
-        } else if (userStorage.get(userId).getFriendsId().isEmpty() || userStorage.get(userId).getFriendsId() == null) {
-            throw new ValidationException("У пользователя ещё нет друзей");
-        } else {
-            Iterator<Integer> friendId = userStorage.get(userId).getFriendsId().iterator();
-            while (friendId.hasNext()) {
-                friends.add(userStorage.get(friendId.next()));
-            }
+    public void deliteUserById(Integer id) {
+        userStorage.deliteUserById(id);
+    }
+
+    public User addToFriends(int userId, int friendId) {
+        if (!userStorage.getUsersIds().contains(userId) || !userStorage.getUsersIds().contains(friendId)) {
+            throw new MissingException("Введен несуществующий id");
+        }
+        return userStorage.updateUsersFriend(userId, friendId);
+    }
+
+    public User deliteFromFriends(int userId, int friendId) {
+        return userStorage.deleteUsersFriend(userId, friendId);
+    }
+
+    public Collection<User> takeFriendsList(int userId) {
+        Collection<User> friends = new ArrayList<>();
+        if (userStorage.getUserById(userId).getFriends().isEmpty()) {
             return friends;
         }
+        Set<Integer> frendsIds = userStorage.getUserById(userId).getFriends();
+        frendsIds.forEach(id -> friends.add(userStorage.getUserById(id)));
+        return friends;
     }
 
-    public User save(User user) {
-        validateUser(user);
-        return userStorage.save(user);
-    }
-
-    public void addFriend(int userId, int friendId) {
-        if (!checkId(userId, friendId)) {
-            User user = get(userId);
-            User friend = get(friendId);
-            userStorage.addFriend(user, friend);
-        } else {
-            throw new MissingException("Пользователь с ID: " + friendId
-                    + "уже в друзьях у пользователя с ID: " + userId);
+    public Collection<User> takeCommonFriendsList(int userId, int otherUserId) {
+        Collection<User> commonFriends = new ArrayList<>();
+        if (userStorage.getUserById(userId).getFriends().isEmpty() || userStorage.getUserById(userId).getFriends() == null) {
+            return commonFriends;
         }
+        Set<Integer> frendsIds = userStorage.getUserById(userId).getFriends();
+        Set<Integer> otherFrendsIds = userStorage.getUserById(otherUserId).getFriends();
+        frendsIds.stream()
+                .filter(otherFrendsIds::contains)
+                .collect(Collectors.toList())
+                .forEach(id -> commonFriends.add(userStorage.getUserById(id)));
+        return commonFriends;
     }
-
-    public void deleteFriend(int userId, int friendId) {
-        if (checkId(userId, friendId)) {
-            User user = get(userId);
-            User friend = get(friendId);
-            userStorage.deleteFriends(user, friend);
-        } else {
-            throw new MissingException("Пользователь с ID: " + friendId
-                    + "не найден в друзьях у пользователя с ID: " + userId);
-        }
-    }
-
-    public List<User> getOthersFriends(int userId, int otherId) {
-        Set<Integer> firstUserFriends = new HashSet<>(get(userId).getFriendsId());
-        Set<Integer> secondUserFriends = get(otherId).getFriendsId();
-        firstUserFriends.retainAll(secondUserFriends);
-        List<User> otherFriends = new ArrayList<>();
-        Iterator<Integer> friendId = firstUserFriends.iterator();
-        while (friendId.hasNext()) {
-            otherFriends.add(get(friendId.next()));
-        }
-        return otherFriends;
-    }
-
-    public boolean checkId(int userId, int friendId) {
-        User firstUser = get(userId);
-        return firstUser.getFriendsId().contains(friendId);
-    }
-
     public void validateUser(User user) throws IllegalArgumentException {
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new FilmsAndUsersValidationException("Не верная дата рождения. Дата не может быть в будущем.");
