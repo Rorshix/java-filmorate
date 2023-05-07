@@ -15,6 +15,7 @@ class UserServiceTest {
 
     UserService userService;
     User user;
+
     @Test
     void shouldCreateUserWithIncorrectEmailWithoutDog() {
         user.setEmail("mailmail.com");
