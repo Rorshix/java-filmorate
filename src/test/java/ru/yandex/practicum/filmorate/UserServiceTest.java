@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.User;
@@ -8,8 +7,6 @@ import ru.yandex.practicum.filmorate.exception.FilmsAndUsersValidationException;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +18,6 @@ class UserServiceTest {
     @Test
     void shouldCreateUserWithIncorrectEmailWithoutDog() {
         user.setEmail("mailmail.com");
-
         FilmsAndUsersValidationException exception = assertThrows(FilmsAndUsersValidationException.class,
                 () -> userService.validateUser(user));
         assertEquals("Не верный адрес электронной почты. " +
