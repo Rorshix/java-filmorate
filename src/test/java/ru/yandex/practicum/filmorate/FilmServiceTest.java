@@ -26,7 +26,6 @@ class FilmServiceTest {
     @Test
     void shouldCreateFilmWithEmptyName() {
         film.setName("");
-
         FilmsAndUsersValidationException exception = assertThrows(FilmsAndUsersValidationException.class,
                 () -> filmService.validateFilm(film));
         assertEquals("Не верное название. Название фильма не может быть пустым.", exception.getMessage());
