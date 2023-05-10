@@ -1,76 +1,43 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.MissingException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
 
-@Data
 @Component
 public class InMemoryUserStorage implements UserStorage {
-
-    private int userId;
-    private final Map<Integer, User> users;
+    private int generator = 0;
+    private Map<Integer, User> allUsers = new HashMap<>();
 
     @Override
-    public User addUsers(User user) {
-        userId++;
-        user.setId(userId);
-        users.put(userId, user);
+    public User get(int userId) {
+        return allUsers.get(userId);
+    }
+
+    @Override
+    public List<User> getAllUsersList() {
+        return new ArrayList<>(allUsers.values());
+    }
+
+    @Override
+    public User save(User user) {
+        if (!allUsers.containsKey(user.getId())) {
+            user.setId(++generator);
+        }
+        allUsers.put(user.getId(), user);
         return user;
     }
 
     @Override
-    public User updateUser(User user) {
-        if (users.containsKey(user.getId())) {
-            users.put(user.getId(), user);
-            if (user.getName() == null) {
-                user.setName(user.getLogin());
-            }
-            return user;
-        } else {
-            throw new MissingException("Пользователь " + user.getId() + " в базе не обнаружен");
-        }
+    public void addFriend(User user, User friend) {
+        user.getFriendsId().add(friend.getId());
+        friend.getFriendsId().add(user.getId());
     }
 
     @Override
-    public void deliteUserById(int userId) {
-        if (users.containsKey(userId)) {
-            users.remove(userId);
-        } else {
-            throw new ValidationException("Пользователь " + userId + " в базе не обнаружен");
-        }
-    }
-
-    @Override
-    public User getUserById(int userId) {
-        if (users.containsKey(userId)) {
-            return users.get(userId);
-        } else {
-            throw new MissingException("Пользователь " + userId + " в базе не обнаружен");
-        }
-    }
-
-    @Override
-    public Collection<User> getUsers() {
-        return users.values();
-    }
-
-    @Override
-    public Collection<Integer> getUsersIds() {
-        return users.keySet();
-    }
-
-    @Override
-    public User updateUsersFriend(int userId, int usersFriendId) {
-        return null;
-    }
-
-    @Override
-    public User deleteUsersFriend(int userId, int usersFriendId) {
-        return null;
+    public void deleteFriends(User user, User friend) {
+        user.getFriendsId().remove(friend.getId());
+        friend.getFriendsId().remove(user.getId());
     }
 }

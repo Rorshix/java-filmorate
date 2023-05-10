@@ -1,10 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.MissingException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -12,59 +11,70 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Slf4j
+@Validated
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    public UserService userService;
 
     @GetMapping
-    public Collection<User> getCustomers() { // Получение всех юзеров
-        return userService.getCustomers();
+    public List<User> getAllUsers() {
+        log.info("Получен запрос. Список всех пользователей");
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getCustomersDyId(@PathVariable("id") Integer id) throws MissingException { // Получение юзера по id
-        return userService.getCustomersDyId(id);
+    public User getUser(@PathVariable int id) {
+        log.info("Получен запрос. Список всех пользователей");
+        return userService.get(id);
     }
 
-    @PostMapping()
-    public User addUsers(@Valid @RequestBody User user) throws ValidationException {
-        return userService.addUsers(user);
+    @PostMapping
+    public User createUser(@Valid @RequestBody User user) {
+        userService.save(user);
+        log.info("Добавлен пользователь: " +
+                user.getName() + " ID: " + user.getId() + " эмэйл: " +
+                user.getEmail() + " логин: " + user.getLogin() +
+                " дата рождения: " + user.getBirthday());
+        return user;
     }
 
-    @PutMapping()
-    public User updateUser(@Valid @RequestBody User user) throws ValidationException, MissingException {
-        return userService.updateUser(user);
-    }
-
-    @PutMapping("/{id}")
-    public void deliteUserById(@PathVariable("id") Integer id) throws ValidationException {
-        userService.deliteUserById(id);
+    @PutMapping
+    public User updateUser(@Valid @RequestBody User user) {
+        userService.get(user.getId());
+        userService.save(user);
+        log.info("Обновлён пользователь: " +
+                user.getName() + " ID: " + user.getId() + " эмэйл: " +
+                user.getEmail() + " логин: " + user.getLogin() +
+                " дата рождения: " + user.getBirthday());
+        return user;
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addToFriends(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId)
-            throws MissingException {
-        return userService.addToFriends(id, friendId);
+    public User addFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.addFriend(id, friendId);
+        log.info("Пользователю: " + " ID: " + id + " добавлен друг: ID:" + friendId);
+        return userService.get(id);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User deleteFromFriends(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId)
-            throws ValidationException, MissingException {
-        return userService.deliteFromFriends(id, friendId);
+    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.deleteFriend(id, friendId);
+        log.info("У пользователю: " + " ID: " + id + " удалён друг: ID:" + friendId);
+        return userService.get(id);
     }
 
     @GetMapping("/{id}/friends")
-    public Collection<User> takeFriendsList(@PathVariable("id") Integer id) throws MissingException {
-        return userService.takeFriendsList(id);
+    public List<User> getAllFriendsList(@PathVariable int id) {
+        log.info("Запрос списка друзей пользователя ID: " + id);
+        return userService.getALlFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Collection<User> takeCommonFriendsList(@PathVariable("id") Integer id,
-                                                  @PathVariable("otherId") Integer otherId)
-            throws ValidationException, MissingException {
-        return userService.takeCommonFriendsList(id, otherId);
+    public List<User> getOtherFriends(@PathVariable int id, @PathVariable int otherId) {
+        log.info("Запрос списка общих друзей пользователя с ID: " + id + "и пользователся с ID: " + otherId);
+        return userService.getOthersFriends(id, otherId);
     }
 }

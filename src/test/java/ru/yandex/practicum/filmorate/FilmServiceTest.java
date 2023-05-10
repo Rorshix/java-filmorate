@@ -34,7 +34,6 @@ class FilmServiceTest {
     @Test
     void shouldCreateFilmWithOver200SimbolDescription() {
         film.setDescription("a".repeat(201));
-
         FilmsAndUsersValidationException exception = assertThrows(FilmsAndUsersValidationException.class,
                 () -> filmService.validateFilm(film));
         assertEquals("Описание фильма больше 200 символов. " +
@@ -44,7 +43,6 @@ class FilmServiceTest {
     @Test
     void shouldCreateFilmWithIncorrectReleaseDate() {
         film.setReleaseDate(LocalDate.of(1000, 10, 11));
-
         FilmsAndUsersValidationException exception = assertThrows(FilmsAndUsersValidationException.class,
                 () -> filmService.validateFilm(film));
         assertEquals("Не верная дата выхода фильма. " +
@@ -54,7 +52,6 @@ class FilmServiceTest {
     @Test
     void shouldCreateFilmWithIncorrectDuration() {
         film.setDuration(-60);
-
         FilmsAndUsersValidationException exception = assertThrows(FilmsAndUsersValidationException.class,
                 () -> filmService.validateFilm(film));
         assertEquals("Не верная продолжительность фильма. " +

@@ -42,7 +42,7 @@ public class FilmService {
 
     public void addLike(int filmId, int userId) {
         if (!checkId(filmId, userId)) {
-            User user = userStorage.getUserById(userId);
+            User user = userStorage.get(userId);
             Film film = getFilmOnId(filmId);
             filmStorage.addLike(film, user);
         } else {
@@ -53,7 +53,7 @@ public class FilmService {
 
     public void deleteLike(int filmId, int userId) {
         if (checkId(filmId, userId)) {
-            User user = userStorage.getUserById(userId);
+            User user = userStorage.get(userId);
             Film film = getFilmOnId(filmId);
             filmStorage.deleteLike(film, user);
         } else {
@@ -68,13 +68,18 @@ public class FilmService {
             throw new MissingException("В списке нет фильмов");
         } else {
             List<Film> filmSort = new ArrayList<>(filmStorage.getAllFilms());
-            return filmSort.subList(0, count);
+            filmSort.sort((film1, film2) -> film2.getFilmsLike().size() - film1.getFilmsLike().size());
+            Iterator<Film> filmIterator = filmSort.iterator();
+            while (filmIterator.hasNext() && mostPopularFilms.size() < count) {
+                mostPopularFilms.add(filmIterator.next());
+            }
         }
+        return mostPopularFilms;
     }
 
     public boolean checkId(int filmId, int userId) {
         Film film = filmStorage.get(filmId);
-        if (userStorage.getUserById(userId) == null) {
+        if (userStorage.get(userId) == null) {
             throw new MissingException("User with id= " + userId + "not found");
         }
         return film.getFilmsLike().contains(userId);
