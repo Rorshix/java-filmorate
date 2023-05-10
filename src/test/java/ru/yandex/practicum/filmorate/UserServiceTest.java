@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.User;
@@ -14,14 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserServiceTest {
 
-    UserService userService = new UserService();
+    UserService userService;
     User user;
-
-    @BeforeEach
-    void createUserForTest() {
-        user = new User(1, "Imia", LocalDate.of(2000, 10, 11),
-                "mail@mail.com", "log");
-    }
 
     @Test
     void shouldCreateUserWithIncorrectEmailWithoutDog() {
