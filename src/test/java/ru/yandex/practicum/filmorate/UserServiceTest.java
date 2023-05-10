@@ -26,7 +26,6 @@ class UserServiceTest {
     @Test
     void shouldCreateUserWithIncorrectEmailWithoutDog() {
         user.setEmail("mailmail.com");
-
         FilmsAndUsersValidationException exception = assertThrows(FilmsAndUsersValidationException.class,
                 () -> userService.validateUser(user));
         assertEquals("Не верный адрес электронной почты. " +
