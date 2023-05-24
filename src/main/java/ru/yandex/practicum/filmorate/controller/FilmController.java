@@ -49,4 +49,23 @@ public class FilmController {
         return film;
     }
 
+    @GetMapping("popular")
+    public List<Film> getPopularFilmsWithLikes(@RequestParam(value = "count", defaultValue = "10", required = false) String count) {
+        log.info("Получен запрос. Список из " + count + "самых популярных фильмов.");
+        return filmService.getMostPopularFilms(Integer.parseInt(count));
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public Film addLikeFilm(@PathVariable int id, @PathVariable int userId) {
+        filmService.addLike(id, userId);
+        log.info("Фильму ID: " + id + "поставлен лайк от пользователя: " + userId);
+        return filmService.getFilmOnId(id);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable int id, @PathVariable int userId) {
+        filmService.deleteLike(id, userId);
+        log.info("У фильма ID: " + id + " удалён лайк от пользователя: " + userId);
+        return filmService.getFilmOnId(id);
+    }
 }

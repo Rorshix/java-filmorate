@@ -51,4 +51,30 @@ public class UserController {
                 " дата рождения: " + user.getBirthday());
         return user;
     }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.addFriend(id, friendId);
+        log.info("Пользователю: " + " ID: " + id + " добавлен друг: ID:" + friendId);
+        return userService.get(id);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.deleteFriend(id, friendId);
+        log.info("У пользователю: " + " ID: " + id + " удалён друг: ID:" + friendId);
+        return userService.get(id);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getAllFriendsList(@PathVariable int id) {
+        log.info("Запрос списка друзей пользователя ID: " + id);
+        return userService.getALlFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getOtherFriends(@PathVariable int id, @PathVariable int otherId) {
+        log.info("Запрос списка общих друзей пользователя с ID: " + id + "и пользователся с ID: " + otherId);
+        return userService.getOthersFriends(id, otherId);
+    }
 }
