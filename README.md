@@ -1,7 +1,7 @@
 #### java-filmorate
 
 # *Доступ к данным приложения осуществляется согласно следующей ER-диаграмме:*
-![Untitled.png](..%2F..%2FDesktop%2FUntitled.png)
+[Untitled.sql](..%2F..%2FDesktop%2FUntitled.sql)
 ## **Примеры SQL-запросов:**
 
 
