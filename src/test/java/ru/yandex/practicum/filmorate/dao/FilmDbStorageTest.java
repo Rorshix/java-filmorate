@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,15 +40,15 @@ class FilmDbStorageTest {
 	@Test
 	public void testAddAndFindFilmByIdStorage() {
 		Optional<Film> filmOptional = Optional.of(filmDbStorage.getFilmById(1));
-		AssertionsForClassTypes.assertThat(filmOptional)
+		assertThat(filmOptional)
 				.isPresent()
 				.hasValueSatisfying(filmTest ->
-						AssertionsForClassTypes.assertThat(filmTest).hasFieldOrPropertyWithValue("id", 1)
+						assertThat(filmTest).hasFieldOrPropertyWithValue("id", 1)
 				)
 				.hasValueSatisfying(filmTest ->
-						AssertionsForClassTypes.assertThat(filmTest).hasFieldOrPropertyWithValue("name", "Крестный Отец"))
+						assertThat(filmTest).hasFieldOrPropertyWithValue("name", "Крестный Отец"))
 				.hasValueSatisfying(filmTest ->
-						AssertionsForClassTypes.assertThat(filmTest).hasFieldOrPropertyWithValue("description", "Фильм про мафию"))
+						assertThat(filmTest).hasFieldOrPropertyWithValue("description", "Фильм про мафию"))
 		;
 	}
 
@@ -60,22 +59,22 @@ class FilmDbStorageTest {
 		filmUpdate.setDescription("Фильм про отчима");
 		filmDbStorage.updateFilm(filmUpdate);
 		Optional<Film> filmOptional = Optional.of(filmDbStorage.getFilmById(1));
-		AssertionsForClassTypes.assertThat(filmOptional)
+		assertThat(filmOptional)
 				.isPresent()
 				.hasValueSatisfying(filmTest ->
-						AssertionsForClassTypes.assertThat(filmTest).hasFieldOrPropertyWithValue("id", 1)
+						assertThat(filmTest).hasFieldOrPropertyWithValue("id", 1)
 				)
 				.hasValueSatisfying(filmTest ->
-						AssertionsForClassTypes.assertThat(filmTest).hasFieldOrPropertyWithValue("name", "Крестный отчим"))
+						assertThat(filmTest).hasFieldOrPropertyWithValue("name", "Крестный отчим"))
 				.hasValueSatisfying(filmTest ->
-						AssertionsForClassTypes.assertThat(filmTest).hasFieldOrPropertyWithValue("description", "Фильм про отчима"))
+						assertThat(filmTest).hasFieldOrPropertyWithValue("description", "Фильм про отчима"))
 		;
 	}
 
 	@Test
 	public void deleteFilm() {
 		filmDbStorage.deliteFilmById(1);
-		MissingException missingException = Assertions.assertThrows( MissingException.class, () -> {
+		MissingException missingException = Assertions.assertThrows(MissingException.class, () -> {
 			filmDbStorage.getFilmById(1);
 		}, "Ошибка валидации");
 	}
