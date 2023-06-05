@@ -17,7 +17,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class GenresDAOImplTest {
 	private final GenresDaoImpl genresDAO;
 
-
 	@Test
 	public void testGenres() {
 		Optional<Genres> genresOptional = Optional.of(genresDAO.getGenresById(1));
