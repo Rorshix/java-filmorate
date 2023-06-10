@@ -27,6 +27,7 @@ class FilmDbStorageTest {
 	@BeforeEach
 	public void createNewFilmAndCleanTables() {
 		jdbcTemplate.update("DELETE FROM film CASCADE");
+
 		jdbcTemplate.update("ALTER TABLE film ALTER COLUMN film_id RESTART WITH 1");
 		Film newFilm = Film.builder()
 				.name("Крестный Отец")
