@@ -1,19 +1,21 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
 
+@Component
 public interface FilmStorage {
+    Film addFilm(Film film);
 
-    Film get(int filmId);
+    Film updateFilm(Film film);
 
-    Film save(Film film);
+    void deliteFilmById(int id);
 
-    void addLike(Film film, User user);
+    List<Film> getFilms();
 
-    void deleteLike(Film film, User user);
+    Film getFilmById(int id);
 
-    List<Film> getAllFilms();
+    Film addLikeToFilm(int userId, int usersFriendId);
 }
