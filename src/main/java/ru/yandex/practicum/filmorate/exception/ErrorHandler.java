@@ -11,22 +11,18 @@ public class ErrorHandler {
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorMessage handleIValidationException(final ValidationException validationException) {
-		return new ErrorMessage (
-				validationException.getMessage()
-		);
+		return new ErrorMessage(validationException.getMessage());
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorMessage missingException(final MissingException missingException) {
-		return new ErrorMessage (
-				missingException.getMessage()
-		);
+		return new ErrorMessage(missingException.getMessage());
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErrorMessage handleException(final Throwable throwable) {
-		return new ErrorMessage (throwable.getMessage());
+		return new ErrorMessage(throwable.getMessage());
 	}
 }
