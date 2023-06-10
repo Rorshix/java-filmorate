@@ -41,6 +41,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public void deliteUserById(@PathVariable("id") Integer id) throws ValidationException {
+
         userService.deliteUserById(id);
     }
 
