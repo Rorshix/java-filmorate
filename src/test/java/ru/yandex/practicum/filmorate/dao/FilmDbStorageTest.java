@@ -74,7 +74,7 @@ class FilmDbStorageTest {
 	@Test
 	public void deleteFilm() {
 		filmDbStorage.deliteFilmById(1);
-		MissingException missingException = Assertions.assertThrows( MissingException.class, () -> {
+		MissingException missingException = Assertions.assertThrows(MissingException.class, () -> {
 			filmDbStorage.getFilmById(1);
 		}, "Ошибка валидации");
 	}
