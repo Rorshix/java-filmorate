@@ -1,38 +1,43 @@
 package ru.yandex.practicum.filmorate.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import ru.yandex.practicum.filmorate.exception.MissingException;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@Builder
 public class Film {
 
     private int id;
-    @NotEmpty
+    @NotBlank
+    @NotNull
     private String name;
+    @Size(max = 200)
     private String description;
-    @Past
     private LocalDate releaseDate;
-    @Min(value = 0, message = "min =0")
+    @Positive
     private int duration;
+    private List<Genres> genres;
+    private Mpa mpa;
+    private Set<Integer> likes;
 
-    @JsonIgnore
-    Set<Integer> filmsLike = new HashSet<>();
+    public Integer getCountLikes() {
+        return likes.size();
+    }
 
-    public Film(int id, String name, String description, LocalDate releaseDate, int duration) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
+    public void deleteLikes(int userId) {
+        if (likes.contains(userId)) {
+            likes.remove(userId);
+        } else {
+            throw new MissingException(String.format("Пользователь с id %s не ставил фильму лайк", userId));
+        }
     }
 }
